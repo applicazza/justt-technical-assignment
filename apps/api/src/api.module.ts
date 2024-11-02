@@ -1,7 +1,5 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { ApiController } from './api.controller';
-import { ApiService } from './api.service';
 import * as joi from 'joi';
 
 @Module({
@@ -20,7 +18,5 @@ import * as joi from 'joi';
       }),
     }),
   ],
-  controllers: [ApiController],
-  providers: [ApiService],
 })
 export class ApiModule {}
