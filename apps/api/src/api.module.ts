@@ -1,6 +1,7 @@
 import { BlogModule } from '@app/blog';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { ThrottlerModule } from '@nestjs/throttler';
 import * as joi from 'joi';
 
 @Module({
@@ -24,6 +25,12 @@ import * as joi from 'joi';
       }),
     }),
     BlogModule,
+    ThrottlerModule.forRoot([
+      {
+        ttl: 60000,
+        limit: 60,
+      },
+    ]),
   ],
 })
 export class ApiModule {}
