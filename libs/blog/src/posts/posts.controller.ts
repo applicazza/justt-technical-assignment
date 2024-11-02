@@ -7,7 +7,6 @@ import {
   Param,
   Delete,
   Query,
-  ValidationPipe,
   ParseIntPipe,
 } from '@nestjs/common';
 import { PostsService } from './posts.service';

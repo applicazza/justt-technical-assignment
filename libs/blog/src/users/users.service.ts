@@ -7,7 +7,6 @@ import {
   Injectable,
   Logger,
 } from '@nestjs/common';
-import { AxiosResponse } from 'axios';
 import { from, of, switchMap, map, catchError, throwError } from 'rxjs';
 import { Cache } from 'cache-manager';
 import { User } from './entities/user.entity';
