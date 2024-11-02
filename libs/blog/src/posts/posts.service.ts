@@ -31,7 +31,7 @@ export class PostsService {
       catchError((error) => {
         throw new HttpException(
           'Failed to create post',
-          HttpStatus.BAD_REQUEST,
+          HttpStatus.INTERNAL_SERVER_ERROR,
           { cause: error },
         );
       }),
@@ -106,13 +106,21 @@ export class PostsService {
   }
 
   update(id: number, updatePostDto: UpdatePostDto) {
-    return this.httpService.patch(id.toString(), updatePostDto).pipe(
-      map((response: AxiosResponse) => response.data),
+    return this.httpService.patch<Post>(id.toString(), updatePostDto).pipe(
+      map((response) => response.data),
       tap(() => this.cacheManager.del(`post_with_user_${id}`)),
       catchError((error) => {
+        if (error.response && error.response.status === 404) {
+          throw new HttpException(
+            `Post with id ${id} not found`,
+            HttpStatus.NOT_FOUND,
+            { cause: error },
+          );
+        }
+
         throw new HttpException(
           `Failed to update post with id ${id}`,
-          HttpStatus.BAD_REQUEST,
+          HttpStatus.INTERNAL_SERVER_ERROR,
           { cause: error },
         );
       }),
@@ -120,13 +128,21 @@ export class PostsService {
   }
 
   remove(id: number) {
-    return this.httpService.delete(id.toString()).pipe(
-      map((response: AxiosResponse) => response.data),
+    return this.httpService.delete<Post>(id.toString()).pipe(
+      map((response) => response.data),
       tap(() => this.cacheManager.del(`post_with_user_${id}`)),
       catchError((error) => {
+        if (error.response && error.response.status === 404) {
+          throw new HttpException(
+            `Post with id ${id} not found`,
+            HttpStatus.NOT_FOUND,
+            { cause: error },
+          );
+        }
+
         throw new HttpException(
           `Failed to delete post with id ${id}`,
-          HttpStatus.BAD_REQUEST,
+          HttpStatus.INTERNAL_SERVER_ERROR,
           { cause: error },
         );
       }),
@@ -134,8 +150,8 @@ export class PostsService {
   }
 
   search(term: string) {
-    return this.httpService.get('', { params: { q: term } }).pipe(
-      map((response: AxiosResponse) => response.data),
+    return this.httpService.get<Post[]>('', { params: { q: term } }).pipe(
+      map((response) => response.data),
       catchError((error) => {
         throw new HttpException(
           'Failed to search posts',
