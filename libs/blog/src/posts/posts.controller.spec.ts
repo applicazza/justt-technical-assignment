@@ -3,6 +3,7 @@ import { PostsController } from './posts.controller';
 import { PostsService } from './posts.service';
 import { HttpModule } from '@nestjs/axios';
 import { CacheModule } from '@nestjs/cache-manager';
+import { ConfigModule } from '@nestjs/config';
 
 describe('PostsController', () => {
   let controller: PostsController;
@@ -11,7 +12,7 @@ describe('PostsController', () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [PostsController],
       providers: [PostsService],
-      imports: [CacheModule.register(), HttpModule],
+      imports: [CacheModule.register(), ConfigModule.forRoot(), HttpModule],
     }).compile();
 
     controller = module.get<PostsController>(PostsController);

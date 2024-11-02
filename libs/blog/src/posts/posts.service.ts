@@ -4,11 +4,13 @@ import { UpdatePostDto } from './dto/update-post.dto';
 import { HttpService } from '@nestjs/axios';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class PostsService {
   constructor(
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
+    private configService: ConfigService,
     private readonly httpService: HttpService,
   ) {}
 

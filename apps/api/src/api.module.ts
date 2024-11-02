@@ -6,6 +6,7 @@ import * as joi from 'joi';
 @Module({
   imports: [
     ConfigModule.forRoot({
+      isGlobal: true,
       validationSchema: joi.object({
         NODE_ENV: joi
           .string()
@@ -16,6 +17,10 @@ import * as joi from 'joi';
           .ip({ version: ['ipv4'] })
           .default('127.0.0.1'),
         PORT: joi.number().default(3000),
+        JSON_PLACEHOLDER_URL: joi
+          .string()
+          .uri()
+          .default('https://jsonplaceholder.typicode.com'),
       }),
     }),
     BlogModule,
