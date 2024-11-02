@@ -10,6 +10,7 @@ import {
 import { AxiosResponse } from 'axios';
 import { from, of, switchMap, map, catchError, throwError } from 'rxjs';
 import { Cache } from 'cache-manager';
+import { User } from './entities/user.entity';
 
 @Injectable()
 export class UsersService {
@@ -23,7 +24,7 @@ export class UsersService {
   findOne(id: number) {
     const userCacheKey = `user_${id}`;
 
-    return from(this.cacheManager.get<any>(userCacheKey)).pipe(
+    return from(this.cacheManager.get<User>(userCacheKey)).pipe(
       switchMap((cachedUser) => {
         if (cachedUser) {
           this.logger.log(`Using cached user with id ${id}`);
@@ -32,8 +33,8 @@ export class UsersService {
 
         this.logger.log(`Fetching user with id ${id}`);
 
-        return this.httpService.get(id.toString()).pipe(
-          map((response: AxiosResponse) => response.data),
+        return this.httpService.get<User>(id.toString()).pipe(
+          map((response) => response.data),
           switchMap((user) =>
             from(this.cacheManager.set(userCacheKey, user, 60000)).pipe(
               map(() => user),

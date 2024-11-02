@@ -13,6 +13,7 @@ import { Cache } from 'cache-manager';
 import { AxiosResponse } from 'axios';
 import { map, catchError, switchMap, of, from, tap } from 'rxjs';
 import { UsersService } from '../users/users.service';
+import { Post } from './entities/post.entity';
 
 @Injectable()
 export class PostsService {
@@ -55,7 +56,7 @@ export class PostsService {
   findOne(id: number) {
     const cacheKey = `post_with_user_${id}`;
 
-    return from(this.cacheManager.get<any>(cacheKey)).pipe(
+    return from(this.cacheManager.get<Post>(cacheKey)).pipe(
       switchMap((cachedData) => {
         if (cachedData) {
           this.logger.log(`Using cached post with id ${id}`);
@@ -64,8 +65,8 @@ export class PostsService {
 
         this.logger.log(`Fetching post with id ${id}`);
 
-        return this.httpService.get(id.toString()).pipe(
-          map((response: AxiosResponse) => response.data),
+        return this.httpService.get<Post>(id.toString()).pipe(
+          map((response) => response.data),
           switchMap(({ userId, ...post }) => {
             return this.usersService.findOne(userId).pipe(
               map((user) => ({ ...post, user })),
