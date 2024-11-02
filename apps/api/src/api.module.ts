@@ -1,9 +1,25 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { ApiController } from './api.controller';
 import { ApiService } from './api.service';
+import * as joi from 'joi';
 
 @Module({
-  imports: [],
+  imports: [
+    ConfigModule.forRoot({
+      validationSchema: joi.object({
+        NODE_ENV: joi
+          .string()
+          .valid('development', 'production', 'test', 'provision')
+          .default('development'),
+        HOST: joi
+          .string()
+          .ip({ version: ['ipv4'] })
+          .default('127.0.0.1'),
+        PORT: joi.number().default(3000),
+      }),
+    }),
+  ],
   controllers: [ApiController],
   providers: [ApiService],
 })
