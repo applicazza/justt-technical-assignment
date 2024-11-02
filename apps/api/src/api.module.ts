@@ -1,3 +1,4 @@
+import { BlogModule } from '@app/blog';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import * as joi from 'joi';
@@ -17,6 +18,7 @@ import * as joi from 'joi';
         PORT: joi.number().default(3000),
       }),
     }),
+    BlogModule,
   ],
 })
 export class ApiModule {}
