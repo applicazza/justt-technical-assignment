@@ -1,10 +1,8 @@
 import { Module } from '@nestjs/common';
-import { PostsService } from './posts.service';
-import { PostsController } from './posts.controller';
+import { UsersService } from './users.service';
 import { HttpModule } from '@nestjs/axios';
 import { CacheModule } from '@nestjs/cache-manager';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { UsersModule } from '../users/users.module';
 
 @Module({
   imports: [
@@ -12,13 +10,12 @@ import { UsersModule } from '../users/users.module';
     HttpModule.registerAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
-        baseURL: `${configService.get('JSON_PLACEHOLDER_BASE_URL')}/posts`,
+        baseURL: `${configService.get('JSON_PLACEHOLDER_BASE_URL')}/users`,
       }),
       inject: [ConfigService],
     }),
-    UsersModule,
   ],
-  controllers: [PostsController],
-  providers: [PostsService],
+  providers: [UsersService],
+  exports: [UsersService],
 })
-export class PostsModule {}
+export class UsersModule {}

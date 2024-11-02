@@ -17,7 +17,7 @@ import * as joi from 'joi';
           .ip({ version: ['ipv4'] })
           .default('127.0.0.1'),
         PORT: joi.number().default(3000),
-        JSON_PLACEHOLDER_URL: joi
+        JSON_PLACEHOLDER_BASE_URL: joi
           .string()
           .uri()
           .default('https://jsonplaceholder.typicode.com'),
