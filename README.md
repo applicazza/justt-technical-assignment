@@ -41,6 +41,8 @@ $ yarn run start:dev
 $ yarn run start:prod
 ```
 
+OpenAPI documentation is available at [http://localhost:3000/api](http://localhost:3000/api)
+
 ## Run tests
 
 ```bash
