@@ -6,10 +6,10 @@ export type Post =
       id: number;
       title: string;
       body: string;
-      user: never;
+      user?: never;
     }
   | {
-      userId: never;
+      userId?: never;
       id: number;
       title: string;
       body: string;

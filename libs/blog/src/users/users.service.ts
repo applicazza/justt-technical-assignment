@@ -24,6 +24,7 @@ export class UsersService {
     const userCacheKey = `user_${id}`;
 
     return from(this.cacheManager.get<User>(userCacheKey)).pipe(
+      catchError(() => of(null)),
       switchMap((cachedUser) => {
         if (cachedUser) {
           this.logger.log(`Using cached user with id ${id}`);
@@ -37,6 +38,7 @@ export class UsersService {
           switchMap((user) =>
             from(this.cacheManager.set(userCacheKey, user, 60000)).pipe(
               map(() => user),
+              catchError(() => of(user)),
             ),
           ),
           catchError((error) => {

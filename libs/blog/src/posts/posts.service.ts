@@ -57,6 +57,7 @@ export class PostsService {
     const cacheKey = `post_with_user_${id}`;
 
     return from(this.cacheManager.get<Post>(cacheKey)).pipe(
+      catchError(() => of(null)),
       switchMap((cachedData) => {
         if (cachedData) {
           this.logger.log(`Using cached post with id ${id}`);
